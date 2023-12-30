@@ -17,9 +17,13 @@ export const jsonRes = <T = any>(
     message?: string;
     data?: T;
     error?: any;
+  },
+  options?: {
+    no_body?: boolean;
   }
 ) => {
   const { code = 200, message = '', data = null, error } = props || {};
+  const { no_body = false } = options || {};
 
   const errResponseKey = typeof error === 'string' ? error : error?.message;
   // Specified error
@@ -49,12 +53,18 @@ export const jsonRes = <T = any>(
     addLog.error(`response error: ${msg}`, error);
   }
 
-  res.status(code).json({
+  let _body: any = {
     code,
     statusText: '',
     message: message || msg,
     data: data !== undefined ? data : null
-  });
+  };
+
+  if (no_body) {
+    _body = { ...data };
+  }
+
+  res.status(code).json(_body);
 };
 
 export const sseErrRes = (res: NextApiResponse, error: any) => {

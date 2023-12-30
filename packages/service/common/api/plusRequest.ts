@@ -5,6 +5,7 @@ interface ConfigType {
   hold?: boolean;
   timeout?: number;
 }
+
 interface ResponseDataType {
   code: number;
   message: string;
@@ -24,6 +25,7 @@ function requestStart(config: InternalAxiosRequestConfig): InternalAxiosRequestC
 function responseSuccess(response: AxiosResponse<ResponseDataType>) {
   return response;
 }
+
 /**
  * 响应数据检查
  */
@@ -70,9 +72,9 @@ instance.interceptors.request.use(requestStart, (err) => Promise.reject(err));
 instance.interceptors.response.use(responseSuccess, (err) => Promise.reject(err));
 
 export function request(url: string, data: any, config: ConfigType, method: Method): any {
-  if (!global.systemEnv?.pluginBaseUrl) {
-    return Promise.reject('该功能为商业版特有...');
-  }
+  // if (!global.systemEnv?.pluginBaseUrl) {
+  //   return Promise.reject('该功能为商业版特有...');
+  // }
 
   /* 去空 */
   for (const key in data) {
@@ -83,7 +85,7 @@ export function request(url: string, data: any, config: ConfigType, method: Meth
 
   return instance
     .request({
-      baseURL: global.systemEnv.pluginBaseUrl,
+      ...(global.systemEnv?.pluginBaseUrl ? { baseURL: global.systemEnv.pluginBaseUrl } : {}),
       url,
       method,
       data: ['POST', 'PUT'].includes(method) ? data : null,

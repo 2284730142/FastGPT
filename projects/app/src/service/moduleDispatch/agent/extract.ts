@@ -128,6 +128,11 @@ async function functionCall({
     }
   };
 
+  console.log(`extractModel`, extractModel);
+  console.log(`agentFunction`, JSON.stringify(agentFunction));
+  console.log(`adaptMessages`, JSON.stringify(adaptMessages));
+  console.log(`agentFunName`, JSON.stringify(agentFunName));
+
   const ai = getAIApi(user.openaiAccount, 480000);
 
   const response = await ai.chat.completions.create({
