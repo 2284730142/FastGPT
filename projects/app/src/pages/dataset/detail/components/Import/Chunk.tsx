@@ -7,7 +7,8 @@ import {
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
-  NumberDecrementStepper
+  NumberDecrementStepper,
+  Input
 } from '@chakra-ui/react';
 import { useConfirm } from '@/web/common/hooks/useConfirm';
 import { formatPrice } from '@fastgpt/global/support/wallet/bill/tools';
@@ -18,7 +19,7 @@ import { useDatasetStore } from '@/web/core/dataset/store/dataset';
 import { useImportStore, SelectorContainer, PreviewFileOrChunk } from './Provider';
 import { useTranslation } from 'next-i18next';
 
-const fileExtension = '.txt, .docx, .pdf, .md';
+const fileExtension = '.txt, .docx, .pdf, .md, .html';
 
 const ChunkImport = () => {
   const { t } = useTranslation();
@@ -29,6 +30,7 @@ const ChunkImport = () => {
   const {
     chunkLen,
     setChunkLen,
+    setCustomSplitChar,
     successChunks,
     totalChunks,
     isUnselectedFile,
@@ -41,31 +43,34 @@ const ChunkImport = () => {
   } = useImportStore();
 
   const { openConfirm, ConfirmModal } = useConfirm({
-    content: `该任务无法终止，需要一定时间生成索引，请确认导入。如果余额不足，未完成的任务会被暂停，充值后可继续进行。`
+    content: t('core.dataset.import.Import Tip')
   });
 
   return (
     <Box display={['block', 'flex']} h={['auto', '100%']}>
       <SelectorContainer fileExtension={fileExtension}>
         {/* chunk size */}
-        <Flex py={4} alignItems={'center'}>
+        <Box mt={4} alignItems={'center'}>
           <Box>
             {t('core.dataset.import.Ideal chunk length')}
             <MyTooltip label={t('core.dataset.import.Ideal chunk length Tips')} forceShow>
-              <QuestionOutlineIcon ml={1} />
+              <QuestionOutlineIcon />
             </MyTooltip>
           </Box>
           <Box
-            flex={1}
+            mt={1}
             css={{
               '& > span': {
                 display: 'block'
               }
             }}
           >
-            <MyTooltip label={`范围: 100~${datasetDetail.vectorModel.maxToken}`}>
+            <MyTooltip
+              label={t('core.dataset.import.Chunk Range', {
+                max: datasetDetail.vectorModel.maxToken
+              })}
+            >
               <NumberInput
-                ml={4}
                 defaultValue={chunkLen}
                 min={100}
                 max={datasetDetail.vectorModel.maxToken}
@@ -83,28 +88,60 @@ const ChunkImport = () => {
               </NumberInput>
             </MyTooltip>
           </Box>
-        </Flex>
-        {/* price */}
-        <Flex py={4} alignItems={'center'}>
+        </Box>
+        {/* custom split char */}
+        <Box mt={4} alignItems={'center'}>
           <Box>
-            预估价格
+            {t('core.dataset.import.Custom split char')}
+            <MyTooltip label={t('core.dataset.import.Custom split char Tips')} forceShow>
+              <QuestionOutlineIcon />
+            </MyTooltip>
+          </Box>
+          <Box mt={1}>
+            <Input
+              defaultValue={''}
+              placeholder="\n;======;==SPLIT=="
+              onChange={(e) => {
+                setCustomSplitChar(e.target.value);
+                setReShowRePreview(true);
+              }}
+            />
+          </Box>
+        </Box>
+        {/* price */}
+        <Flex mt={4} alignItems={'center'}>
+          <Box>
+            {t('core.dataset.import.Estimated Price')}
             <MyTooltip
-              label={`索引生成计费为: ${formatPrice(unitPrice, 1000)}/1k tokens`}
+              label={t('core.dataset.import.Estimated Price Tips', {
+                price: formatPrice(unitPrice, 1000)
+              })}
               forceShow
             >
               <QuestionOutlineIcon ml={1} />
             </MyTooltip>
           </Box>
-          <Box ml={4}>{price}元</Box>
+          <Box ml={4}>{t('common.price.Amount', { amount: price, unit: '元' })}</Box>
         </Flex>
         <Flex mt={3}>
           {showRePreview && (
-            <Button variant={'base'} mr={4} onClick={onReSplitChunks}>
-              重新生成预览
+            <Button variant={'whitePrimary'} mr={4} onClick={onReSplitChunks}>
+              {t('core.dataset.import.Re Preview')}
             </Button>
           )}
-          <Button isDisabled={uploading} onClick={openConfirm(onclickUpload)}>
-            {uploading ? <Box>{Math.round((successChunks / totalChunks) * 100)}%</Box> : '确认导入'}
+          <Button
+            isDisabled={uploading}
+            onClick={() => {
+              onReSplitChunks();
+
+              openConfirm(onclickUpload)();
+            }}
+          >
+            {uploading ? (
+              <Box>{Math.round((successChunks / totalChunks) * 100)}%</Box>
+            ) : (
+              t('common.Confirm Import')
+            )}
           </Button>
         </Flex>
       </SelectorContainer>

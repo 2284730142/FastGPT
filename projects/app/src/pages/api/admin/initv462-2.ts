@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { jsonRes } from '@fastgpt/service/common/response';
 import { connectToDatabase } from '@/service/mongo';
-import { delay } from '@/utils/tools';
+import { delay } from '@fastgpt/global/common/system/utils';
 import { authCert } from '@fastgpt/service/support/permission/auth/common';
 import { MongoApp } from '@fastgpt/service/core/app/schema';
 import { FlowNodeInputTypeEnum, FlowNodeTypeEnum } from '@fastgpt/global/core/module/node/constant';
 import { DatasetSearchModeEnum } from '@fastgpt/global/core/dataset/constant';
-import { ModuleDataTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
+import { ModuleIOValueTypeEnum, ModuleInputKeyEnum } from '@fastgpt/global/core/module/constants';
 import { ModuleItemType } from '@fastgpt/global/core/module/type';
 
 let success = 0;
@@ -52,7 +52,7 @@ export async function initApp(limit = 50): Promise<any> {
                   key: ModuleInputKeyEnum.datasetSearchMode,
                   type: FlowNodeInputTypeEnum.hidden,
                   label: 'core.dataset.search.Mode',
-                  valueType: ModuleDataTypeEnum.string,
+                  valueType: ModuleIOValueTypeEnum.string,
                   showTargetInApp: false,
                   showTargetInPlugin: false,
                   value: val

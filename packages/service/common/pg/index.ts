@@ -9,7 +9,8 @@ export const connectPg = async (): Promise<Pool> => {
 
   global.pgClient = new Pool({
     connectionString: process.env.PG_URL,
-    max: Number(process.env.DB_MAX_LINK || 5),
+    max: Number(process.env.DB_MAX_LINK || 20),
+    min: 10,
     keepAlive: true,
     idleTimeoutMillis: 60000,
     connectionTimeoutMillis: 20000
@@ -171,9 +172,10 @@ export async function initPg() {
           tmb_id VARCHAR(50) NOT NULL,
           dataset_id VARCHAR(50) NOT NULL,
           collection_id VARCHAR(50) NOT NULL,
-          data_id VARCHAR(50) NOT NULL
+          data_id VARCHAR(50) NOT NULL,
+          createTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-      CREATE INDEX IF NOT EXISTS vector_index ON ${PgDatasetTableName} USING hnsw (vector vector_ip_ops) WITH (m = 24, ef_construction = 64);
+      CREATE INDEX IF NOT EXISTS vector_index ON ${PgDatasetTableName} USING hnsw (vector vector_ip_ops) WITH (m = 32, ef_construction = 64);
     `);
 
     console.log('init pg successful');

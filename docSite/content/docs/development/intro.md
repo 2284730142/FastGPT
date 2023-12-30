@@ -1,10 +1,10 @@
 ---
-title: '快速开始'
+title: '快速开始本地开发'
 description: '对 FastGPT 进行开发调试'
 icon: 'developer_guide'
 draft: false
 toc: true
-weight: 510
+weight: 705
 ---
 
 本文档介绍了如何设置开发环境以构建和测试 [FastGPT](https://fastgpt.run)。
@@ -46,7 +46,7 @@ git clone git@github.com:<github_username>/FastGPT.git
 
 ### 3. 安装数据库
 
-第一次开发，需要先部署数据库，建议本地开发可以随便找一台 2C2G 的轻量小数据库实践。数据库部署教程：[Docker 快速部署](/docs/installation/docker/)。部署完了，可以本地访问其数据库。
+第一次开发，需要先部署数据库，建议本地开发可以随便找一台 2C2G 的轻量小数据库实践。数据库部署教程：[Docker 快速部署](/docs/development/docker/)。部署完了，可以本地访问其数据库。
 
 ### 4. 初始配置
 
@@ -107,4 +107,4 @@ docker build -t dockername/fastgpt --build-arg name=app .
 
 遇到困难了吗？有任何问题吗? 加入微信群与开发者和用户保持沟通。
 
-<center><image width="400px" src="/wechat-fastgpt.webp" /></center>
+<center><image width="400px" src="https://oss.laf.run/htr4n1-images/fastgpt-qr-code.jpg" /></center>

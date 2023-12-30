@@ -102,14 +102,14 @@ const Test = ({ datasetId }: { datasetId: string }) => {
         py={4}
         borderRight={['none', theme.borders.base]}
       >
-        <Box border={'2px solid'} borderColor={'myBlue.600'} p={3} mx={4} borderRadius={'md'}>
+        <Box border={'2px solid'} borderColor={'primary.500'} p={3} mx={4} borderRadius={'md'}>
           <Flex alignItems={'center'}>
             <Box fontSize={'sm'} fontWeight={'bold'} flex={1}>
-              <MyIcon mr={2} name={'text'} w={'18px'} h={'18px'} color={'myBlue.700'} />
+              <MyIcon mr={2} name={'text'} w={'18px'} h={'18px'} color={'primary.600'} />
               {t('core.dataset.test.Test Text')}
             </Box>
             <Button
-              variant={'base'}
+              variant={'whitePrimary'}
               leftIcon={<MyIcon name={searchModeData.icon as any} w={'14px'} />}
               size={'sm'}
               onClick={onOpenSelectMode}
@@ -187,7 +187,7 @@ const Test = ({ datasetId }: { datasetId: string }) => {
         </Box>
       </Box>
       {/* result show */}
-      <Box p={4} h={['auto', '100%']} overflow={'overlay'} flex={1}>
+      <Box p={4} h={['auto', '100%']} overflow={'overlay'} flex={'1 0 0'}>
         {!datasetTestItem?.results || datasetTestItem.results.length === 0 ? (
           <Flex
             mt={[10, 0]}
@@ -236,7 +236,7 @@ const Test = ({ datasetId }: { datasetId: string }) => {
                   border={theme.borders.base}
                   _notLast={{ mb: 2 }}
                   cursor={'pointer'}
-                  title={'编辑'}
+                  title={t('common.Edit')}
                   onClick={async () => {
                     try {
                       setLoading(true);
@@ -275,7 +275,7 @@ const Test = ({ datasetId }: { datasetId: string }) => {
                     <MyIcon name={'kbTest'} w={'14px'} />
                     <Progress
                       mx={2}
-                      flex={1}
+                      flex={'1 0 0'}
                       value={item.score * 100}
                       size="sm"
                       borderRadius={'20px'}
@@ -283,7 +283,7 @@ const Test = ({ datasetId }: { datasetId: string }) => {
                     />
                     <Box>{item.score.toFixed(4)}</Box>
                   </Flex>
-                  <Box px={2} fontSize={'xs'} color={'myGray.600'}>
+                  <Box px={2} fontSize={'xs'} color={'myGray.600'} wordBreak={'break-word'}>
                     <Box>{item.q}</Box>
                     <Box>{item.a}</Box>
                   </Box>

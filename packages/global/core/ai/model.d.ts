@@ -14,7 +14,7 @@ export type ChatModelItemType = LLMModelItemType & {
 };
 
 export type FunctionModelItemType = LLMModelItemType & {
-  functionCall: boolean;
+  toolChoice: boolean;
   functionPrompt: string;
 };
 
@@ -24,6 +24,7 @@ export type VectorModelItemType = {
   defaultToken: number;
   price: number;
   maxToken: number;
+  weight: number;
 };
 
 export type ReRankModelItemType = {
